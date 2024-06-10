@@ -10,6 +10,7 @@ var waitForJQuery = setInterval(function () {
 var bearerToken;
 var patientMeasurements;
 var avarosHelperData = {};
+var avarosClientName;
 
 // Compute BMI
 function getBMI(data){
@@ -43,9 +44,10 @@ function fetchMeasurements(token){
     url = window.location.href;
     demographicNo = _.last(_.split(url,"/"));
 
+    // clientName can be obtained from /demographics API endpoint
     const request = new Request("https://services.avaros.ca/av/api/chart/measurements/", {
         method: "POST",
-        body: '{"demographics":[{"demographicNo":"' + demographicNo + '","clientName":"corktown"}]}',
+        body: '{"demographics":[{"demographicNo":"' + demographicNo + '","clientName":"' + avarosClientName +'"}]}',
         headers: rHeaders
     });
 
@@ -60,6 +62,38 @@ function fetchMeasurements(token){
         console.log("Fetched measurement data");
         patientMeasurements = data;
         return data;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function fetchAvarosClientName(token){
+    const rHeaders = new Headers();
+
+    rHeaders.append("Content-Type", "application/json");
+    rHeaders.append("Authorization", "bearer" + " " + token);
+    rHeaders.append("Accept","application/json");
+
+    url = window.location.href;
+    demographicNo = _.last(_.split(url,"/"));
+
+    // clientName can be obtained from /demographics API endpoint
+    const request = new Request("https://services.avaros.ca/av/api/chart/link/demographic/?demographicNo=" + demographicNo, {
+        method: "GET",
+        headers: rHeaders
+    });
+
+    return fetch(request)
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        avarosClientName = data.clientName;
+        return token;
     })
     .catch(error => {
         console.error('Error:', error);
@@ -90,7 +124,7 @@ function updateStorage(){
 
 // Main
 
-cookieStore.getAll().then(getJwtCookie).then(fetchMeasurements).then(getBMI).then(updateStorage);
+cookieStore.getAll().then(getJwtCookie).then(fetchAvarosClientName).then(fetchMeasurements).then(getBMI).then(updateStorage);
 
 
 
