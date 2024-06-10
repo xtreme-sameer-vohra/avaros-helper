@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "Avros Helper",
+    "version": "1.0",
+    "description": "Add some helpers for Avros EMR",
+    "content_scripts": [
+    {
+      "js": [ 
+        "scripts/lodash.4.17.15.min.js",
+        "scripts/cash.min.js", 
+        "scripts/content.js"
+      ],
+      "matches": [
+        "https://app.avaros.ca/*"
+      ]
+    }
+    ],
+    "host_permissions": [
+      "*://*.avaros.ca/"
+    ],
+    "permissions": ["cookies"]
+  }
