@@ -5,22 +5,30 @@
     <link rel="stylesheet" href="../css/bootstrap.min.css">
   </head>
   <body>
-    <h3>BMI Calculator</h3>
+    <h6>BMI Calculator</h6>
     <hr />
-    <div>
-        <p>Height: <span id="height"></span></p>
-    </div>
-    <div>
-        <p>Weight: <span id="weight"></span></p>
-    </div>
-    <div>
-        <p>BMI: <span id="bmi"></span></p>
-    </div>
-    <h3>Med Calc References</h3>
-    <div>
-        <div><a href="https://www.mdcalc.com/calc/2200/fibrosis-4-fib-4-index-liver-fibrosis">Fib 4</a></div>
-        <div><a href="https://www.mdcalc.com/calc/3400/ascvd-atherosclerotic-cardiovascular-disease-risk-algorithm-including-known-ascvd-aha-acc">ASCVD</a></div>
-    </div>
+    <table class="table table-striped">
+        <tbody>
+           <tr>
+             <th scope="row">Height</th>
+             <td><span id="height"></span></td>
+           </tr>
+           <tr>
+             <th scope="row">Weight</th>
+             <td><span id="weight"></span></td>
+           </tr>
+           <tr>
+            <th scope="row">BMI</th>
+            <td><span id="bmi"></span></td>
+           </tr>
+        </tbody>
+   </table>
+
+    <h6>Med Calc References</h6>
+    <ul>
+        <li><a href="https://www.mdcalc.com/calc/2200/fibrosis-4-fib-4-index-liver-fibrosis">Fib 4</a></li>
+        <li><a href="https://www.mdcalc.com/calc/3400/ascvd-atherosclerotic-cardiovascular-disease-risk-algorithm-including-known-ascvd-aha-acc">ASCVD</a></li>
+      </ul>
   </body>
   <script src="../scripts/cash.min.js"></script>
   <script src="../scripts/sidepanel.js"></script>
