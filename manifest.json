@@ -4,19 +4,25 @@
     "version": "1.0",
     "description": "Add some helpers for Avros EMR",
     "content_scripts": [
-    {
-      "js": [ 
-        "scripts/lodash.4.17.15.min.js",
-        "scripts/cash.min.js", 
-        "scripts/content.js"
-      ],
-      "matches": [
-        "https://app.avaros.ca/*"
-      ]
-    }
+      {
+        "js": [
+          "scripts/lodash.4.17.15.min.js",
+          "scripts/cash.min.js",
+          "scripts/content.js"
+        ],
+        "matches": [
+          "https://app.avaros.ca/*"
+        ]
+      }
     ],
     "host_permissions": [
       "*://*.avaros.ca/"
     ],
-    "permissions": ["cookies"]
+    "permissions": ["cookies","sidePanel","storage"],
+    "side_panel": {
+      "default_path": "pages/sidepanel.html"
+    },
+    "background": {
+      "service_worker": "scripts/service-worker.js"
+    }
   }
