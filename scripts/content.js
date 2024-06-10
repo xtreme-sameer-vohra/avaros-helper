@@ -1,26 +1,22 @@
 console.log("Hi from Avros Helper wow");
 
+// Cash loading
 var waitForJQuery = setInterval(function () {
     if (typeof $ != 'undefined') {
         // place your code here.
-        $('html').addClass ( 'dom-loaded' );
-        $('<footer>Appended with Cash</footer>').appendTo ( document.body );
         clearInterval(waitForJQuery);
-    
     }
 }, 10);
 
 // VARs
-var myCookies;
 var bearerToken;
 var patientMeasurements;
 
-
 // Compute BMI
-function getBMI(){
-    height = _.find(patientMeasurements.measurements, function(o){ return o.type == "HT" }).dataField;
+function getBMI(data){
+    height = _.find(data.measurements, function(o){ return o.type == "HT" }).dataField;
     heightInMeters = height / 100;
-    weight = _.find(patientMeasurements.measurements, function(o){ return o.type == "WT" }).dataField;
+    weight = _.find(data.measurements, function(o){ return o.type == "WT" }).dataField;
 
     bmi = weight / (heightInMeters * heightInMeters);
     console.log("Patients BMI is ", bmi);
@@ -28,11 +24,11 @@ function getBMI(){
 
 // QUERY API
 
-function fetchMeasurements(){
+function fetchMeasurements(token){
     const rHeaders = new Headers();
 
     rHeaders.append("Content-Type", "application/json");
-    rHeaders.append("Authorization", "bearer" + " " + bearerToken);
+    rHeaders.append("Authorization", "bearer" + " " + token);
     rHeaders.append("Accept","application/json");
     
     const request = new Request("https://services.avaros.ca/av/api/chart/measurements/", {
@@ -41,7 +37,7 @@ function fetchMeasurements(){
         headers: rHeaders
     });
 
-    fetch(request)
+    return fetch(request)
     .then(response => {
         if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -49,10 +45,10 @@ function fetchMeasurements(){
         return response.json();
     })
     .then(data => {
-        console.log("Gott the data");
+        console.log("Fetched measurement data");
         console.log(data);
         patientMeasurements = data;
-        getBMI();
+        return data;
     })
     .catch(error => {
         console.error('Error:', error);
@@ -61,15 +57,24 @@ function fetchMeasurements(){
 
 // COOKIES
 
-function parseCookies(cookies) {
-    console.log("Got cookie")
+var myCookies;
+function getJwtCookie(cookies) {
+    console.log("Got cookies")
+    var token;
     myCookies = cookies;
     jwt = _.find(cookies, function(o) { return o.name == "JWT"; });
-    bearerToken = _.trim(jwt.value,'"');
+    if (jwt) {
+        token = _.trim(jwt.value,'"');
+        bearerToken = token;
+        return token;
+    } else {
+        console.log("JWT cookie not found. Please ensure user is logged in.");
+        throw new Error('JWT cookie not found');
+    }
 }
 
 
-cookieStore.getAll().then(parseCookies).then(fetchMeasurements);
+cookieStore.getAll().then(getJwtCookie).then(fetchMeasurements).then(getBMI);
 
 
 
