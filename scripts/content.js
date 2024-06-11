@@ -2,6 +2,8 @@
 var waitForJQuery = setInterval(function () {
     if (typeof $ != 'undefined') {
         // place your code here.
+        waitForHeaderToLoad().then(parseAge).then(updateStorage);
+        waitForHeaderToLoad().then(parseSex).then(updateStorage);
         clearInterval(waitForJQuery);
     }
 }, 10);
@@ -24,12 +26,66 @@ function getBMI(data){
     height = _.find(data.measurements, function(o){ return o.type == "HT" }).dataField;
     heightInMeters = height / 100;
     weight = _.find(data.measurements, function(o){ return o.type == "WT" }).dataField;
-    bmi = weight / (heightInMeters * heightInMeters);
+    bmi = _.floor(weight / (heightInMeters * heightInMeters));
 
     avarosHelperData['height'] = height;
     avarosHelperData['weight'] = weight;
     avarosHelperData['bmi'] = bmi;
-    console.log("Patients BMI is ", bmi);
+
+}
+
+// Patient Age
+function waitForHeaderToLoad(){
+    return new Promise((resolve) => {
+        var waitForHeaderText = setInterval(function () {
+            if ($('.header-node') && $('.header-node').text() != "") {
+                clearInterval(waitForHeaderText);
+                resolve('resolved');
+            }
+        }, 10); 
+    });
+}
+
+function parseAge(){
+    headertext = $('.header-node').text();
+    // Check for date in YYYY-MM-DD format
+    result = headertext.match(/\d{4}-\d{2}-\d{2}/);
+    if (!result || !result[0]){
+        console.log("Unable to obtain age. No match:", result, " headertext: ", headertext);
+        return;
+    }
+    date = result[0];
+    avarosHelperData['dob'] = date;
+
+    deltaTime = new Date() - new Date(date);
+    days = deltaTime / (1000 * 60 * 60 * 24);
+    years = _.floor(days / 365);
+    console.log("DOB is :",date, " age is:", years);
+
+    avarosHelperData['dob'] = date;
+    avarosHelperData['age'] = years;
+}
+
+// Patient Sex
+function parseSex(){
+    headertext = $('.header-node').text();
+    // Check for date in YYYY-MM-DD format
+    result = headertext.match(/years\)(\w)/);
+    if (!result || !result[0]){
+        console.log("Unable to obtain sex. No match:", result, " headertext: ", headertext);
+        return;
+    }
+    abbvSex = result[1];
+
+    if (abbvSex == "M" || abbvSex == "m") {
+        avarosHelperData['sex'] = "Male";
+    }else if (abbvSex == "F" || abbvSex == "f") {
+        avarosHelperData['sex'] = "Female";
+    }else if (abbvSex == "T" || abbvSex == "t") {
+        avarosHelperData['sex'] = "Transgender";
+    } else {
+        avarosHelperData['sex'] = "Unknown";
+    }
 }
 
 // QUERY API
