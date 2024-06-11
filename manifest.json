@@ -8,10 +8,19 @@
         "js": [
           "scripts/lodash.4.17.15.min.js",
           "scripts/cash.min.js",
-          "scripts/content.js"
+          "scripts/avaros-content.js"
         ],
         "matches": [
           "https://app.avaros.ca/*"
+        ]
+      },
+      {
+        "js": [
+          "scripts/cash.min.js",
+          "scripts/med-calc-content.js"
+        ],
+        "matches": [
+          "https://www.mdcalc.com/*"
         ]
       }
     ],
