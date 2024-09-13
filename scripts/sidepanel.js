@@ -14,6 +14,7 @@ function updateSidePanel(data) {
    $('#height').text(data.height);
    $('#weight').text(data.weight);
    $('#bmi').text(data.bmi);
+   $('#preventative-health').text(data['preventative-health']);
 }
 
 console.log("side panel js running");
