@@ -11,7 +11,7 @@ var waitForJQuery = setInterval(function () {
 var bearerToken;
 var patientMeasurements;
 var avarosHelperData = {};
-avarosHelperData['preventative-health'] = [];
+avarosHelperData['preventative-health'] = {};
 var avarosClientName;
 
 // Compute BMI
@@ -37,9 +37,10 @@ function getBMI(data){
 // BMI Preventative Health
 function getBMIPreventativeHealth(){
     if (avarosHelperData['bmi'] > 25){
-        avarosHelperData['preventative-health'].push("Overweight/Obese: structured behavioural interventions for weight loss");
-        avarosHelperData['preventative-health'].push("Overweight/Obese: screen for mental illness if obese");
-        avarosHelperData['preventative-health'].push("Overweight/Obese: multidisciplinary approach");
+        avarosHelperData['preventative-health']['Overweight / Obese'] = [];
+        avarosHelperData['preventative-health']['Overweight / Obese'].push("Structured behavioural interventions for weight loss");
+        avarosHelperData['preventative-health']['Overweight / Obese'].push("Screen for mental illness if obese");
+        avarosHelperData['preventative-health']['Overweight / Obese'].push("Multidisciplinary approach");
     }
 }
 
@@ -77,28 +78,35 @@ function parseAge(){
 
 function getAgeSexPreventativeHealth(){
     if (avarosHelperData['age'] > 65 & avarosHelperData['sex'] == "Male"){
-        avarosHelperData['preventative-health'].push("Over 65: AAA screen (ultrasound once 65 to 80 yrs)");
+        avarosHelperData['preventative-health']['Over 65'] = [];
+        avarosHelperData['preventative-health']['Over 65'].push("AAA screen (ultrasound once 65 to 80 yrs)");
     }
     if (avarosHelperData['age'] > 50 & avarosHelperData['sex'] == "Female"){
-        avarosHelperData['preventative-health'].push("Over 50: Mammography (50-74 yrs, q2-3 yrs)");
-        avarosHelperData['preventative-health'].push("Over 50: Acellular pertussis vaccine vaccine (≥50 yrs) (2 doses)");
+        avarosHelperData['preventative-health']['Over 50'] = [];
+        avarosHelperData['preventative-health']['Over 50'].push("Mammography (50-74 yrs, q2-3 yrs)");
+        avarosHelperData['preventative-health']['Over 50'].push("Acellular pertussis vaccine vaccine (≥50 yrs) (2 doses)");
     }
     if (avarosHelperData['age'] < 45 & avarosHelperData['sex'] == "Female"){
-        avarosHelperData['preventative-health'].push("Under 45: Human papillomavirus vaccine (up to 45 yrs)");
+        avarosHelperData['preventative-health']['Under 45'] = [];
+        avarosHelperData['preventative-health']['Under 45'].push("Human papillomavirus vaccine (up to 45 yrs)");
     }
     if (avarosHelperData['age'] > 25 & avarosHelperData['sex'] == "Female"){
-        avarosHelperData['preventative-health'].push("Over 25: Cervical Cytology q3 yrs (if ever sexually active and 25-69 yrs)");
+        avarosHelperData['preventative-health']['Over 25'] = [];
+        avarosHelperData['preventative-health']['Over 25'].push("Cervical Cytology q3 yrs (if ever sexually active and 25-69 yrs)");
     }
 
     if (avarosHelperData['age'] > 65){
-        avarosHelperData['preventative-health'].push("Over 65: Hemoccult Multiphase 2 yrs (60 to 74 yrs) FOBT or FIT OR Sigmoidoscopy q10 yrs");
-        avarosHelperData['preventative-health'].push("Over 65: Audioscope (or inquire/whispered voice test)");
+        !avarosHelperData['preventative-health']['Over 65'] ? avarosHelperData['preventative-health']['Over 65'] = [] : null;
+        avarosHelperData['preventative-health']['Over 65'].push("Hemoccult Multiphase 2 yrs (60 to 74 yrs) FOBT or FIT OR Sigmoidoscopy q10 yrs");
+        avarosHelperData['preventative-health']['Over 65'].push("Audioscope (or inquire/whispered voice test)");
     }
     if (avarosHelperData['age'] > 55){
-        avarosHelperData['preventative-health'].push("Over 55: Low dose CT scan q1 yr (55-74 yrs) if risk factors (≥30 pack/yr, currently smoke or quit less than 15 yrs ago) up to 3 times");
+        avarosHelperData['preventative-health']['Over 55'] = [];
+        avarosHelperData['preventative-health']['Over 55'].push("Low dose CT scan q1 yr (55-74 yrs) if risk factors (≥30 pack/yr, currently smoke or quit less than 15 yrs ago) up to 3 times");
     }
     if (avarosHelperData['age'] > 40){
-        avarosHelperData['preventative-health'].push("Over 40: Lipid Profile q1-5 yrs");
+        avarosHelperData['preventative-health']['Over 40'] = [];
+        avarosHelperData['preventative-health']['Over 40'].push("Lipid Profile q1-5 yrs");
     }
 
 }

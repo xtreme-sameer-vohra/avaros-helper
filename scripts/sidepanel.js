@@ -14,7 +14,20 @@ function updateSidePanel(data) {
    $('#height').text(data.height);
    $('#weight').text(data.weight);
    $('#bmi').text(data.bmi);
-   $('#preventative-health').text(data['preventative-health']);
+
+   $('#preventative-health').empty();
+    _.forEach(data['preventative-health'], (value, key) => {
+        console.log(key, value);
+        header = $('<h4></h4>');
+        header.text(key);
+        details = $('<ul></ul>');
+        _.forEach(value, (item) => {
+            details.append($('<li></li>').text(item));
+        });
+        $('#preventative-health').append(header);
+        $('#preventative-health').append(details);
+    });
+
 }
 
 console.log("side panel js running");
