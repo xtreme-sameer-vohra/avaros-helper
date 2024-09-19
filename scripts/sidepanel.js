@@ -27,18 +27,21 @@ function updateSidePanel(data) {
 
 
    $('#preventative-health').empty();
-    _.forEach(data['preventative-health'], (value, key) => {
-        console.log(key, value);
-        header = $('<h4></h4>');
-        header.text(key);
-        details = $('<ul></ul>');
-        _.forEach(value, (item) => {
-            details.append($('<li></li>').text(item));
-        });
-        $('#preventative-health').append(header);
-        $('#preventative-health').append(details);
+   if (data['preventative-health'].length > 0){
+      header = $('<h3>Preventative Health</h3>');
+      $('#preventative-health').append(header);
+      _.forEach(data['preventative-health'], (value, key) => {
+            console.log(key, value);
+            header = $('<h4></h4>');
+            header.text(key);
+            details = $('<ul></ul>');
+            _.forEach(value, (item) => {
+                details.append($('<li></li>').text(item));
+            });
+            $('#preventative-health').append(header);
+            $('#preventative-health').append(details);
     });
-
+   }
 }
 
 console.log("side panel js running");
