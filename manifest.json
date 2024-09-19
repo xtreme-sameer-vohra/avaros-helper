@@ -3,11 +3,16 @@
     "name": "Avaros Helper",
     "version": "1.0",
     "description": "Add some helpers for Avaros EMR",
+    "icons": {
+      "16": "assets/icons/favicon-16x16.png",
+      "32": "assets/icons/favicon-32x32.png",
+      "128": "assets/icons/favicon.ico"
+    },
     "content_scripts": [
       {
         "js": [
-          "scripts/lodash.4.17.15.min.js",
-          "scripts/cash.min.js",
+          "assets/js/lodash.4.17.15.min.js",
+          "assets/js/cash.min.js",
           "scripts/avaros-content.js"
         ],
         "matches": [
@@ -16,7 +21,7 @@
       },
       {
         "js": [
-          "scripts/cash.min.js",
+          "assets/js/cash.min.js",
           "scripts/med-calc-content.js"
         ],
         "matches": [
@@ -29,7 +34,12 @@
     ],
     "permissions": ["cookies","sidePanel","storage"],
     "side_panel": {
-      "default_path": "pages/sidepanel.html"
+      "default_path": "pages/sidepanel.html",
+      "default_icon": {
+        "16": "assets/icons/favicon-16x16.png",
+        "32": "assets/icons/favicon-32x32.png",
+        "128": "assets/icons/favicon.ico"
+      }
     },
     "background": {
       "service_worker": "scripts/service-worker.js"
