@@ -169,6 +169,65 @@ function fetchMeasurements(token){
     });
 }
 
+function extractLMPDate(text) {
+    const regex = /LMP:\s*(\d{1,2}\/\d{1,2}\/\d{4})/;
+    const match = text.match(regex);
+    return match && match[1] ? match[1] : null;
+}
+// Calculate EDD from LMP - Estimated due date (EDD) = 1st day of LMP + 40 weeks* (Naegele's Rule)
+function calculateEDD(lmpDate) {
+    // Parse the LMP date string into a Date object
+    const [month, day, year] = lmpDate.split('/');
+    const lmp = new Date(year, month - 1, day);  // month is 0-indexed in Date constructor
+
+    // Add 40 weeks (280 days) to LMP
+    const edd = new Date(lmp.getTime() + (280 * 24 * 60 * 60 * 1000));
+
+    // Format the EDD back to MM/DD/YYYY
+    return `${edd.getMonth() + 1}/${edd.getDate()}/${edd.getFullYear()}`;
+}
+
+function getLMP(token) {
+    return fetchNotes(token).then((notes) => {
+        console.log("Got Notes for LMP data", notes);
+        const lmpNote = notes.find(item => item.note.includes("LMP:"));
+        if (lmpNote) {
+            console.log("Got LMP data", lmpNote);
+            const lmpDate = extractLMPDate(lmpNote.note);
+            if (lmpDate) {
+                avarosHelperData['lmp'] = lmpDate;
+                avarosHelperData['edd'] = calculateEDD(lmpDate);
+            }
+        }
+    });
+}
+
+function fetchNotes(token){
+    const rHeaders = new Headers();
+
+    rHeaders.append("Content-Type", "application/json");
+    rHeaders.append("Authorization", "bearer" + " " + token);
+    rHeaders.append("Accept","application/json");
+    
+    const request = new Request("https://services.avaros.ca/av/api/chart/notes/", {
+        method: "POST",
+        body: '{"demographics":[{"demographicNo":"' + demographicNo + '","clientName":"' + avarosClientName +'"}]}',
+        headers: rHeaders
+    });
+    
+    return fetch(request)
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('Network response was not ok');
+        }
+        console.log("Fetched Notes data");
+        return response.json();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
 function fetchAvarosClientName(token){
     const rHeaders = new Headers();
 
@@ -225,7 +284,9 @@ function updateStorage(){
 
 // Main
 
-cookieStore.getAll().then(getJwtCookie).then(fetchAvarosClientName).then(fetchMeasurements).then(getBMI).then(getBMIPreventativeHealth).then(updateStorage);
-
+cookieStore.getAll().then(getJwtCookie).then(fetchAvarosClientName).then((token) => {
+    fetchMeasurements(token).then(getBMI).then(getBMIPreventativeHealth).then(updateStorage);
+    getLMP(token).then(updateStorage);
+}).catch(error => console.error('Error in promise chain:', error));
 
 

@@ -15,6 +15,17 @@ function updateSidePanel(data) {
    $('#weight').text(data.weight);
    $('#bmi').text(data.bmi);
 
+   if (data.lmp){
+      $('#lmp').text(data.lmp);
+      $('#edd').text(data.edd);
+      $('#lmp').closest('tr').show();
+      $('#edd').closest('tr').show();
+   } else {
+      $('#lmp').closest('tr').hide();
+    $('#edd').closest('tr').hide();
+   }
+
+
    $('#preventative-health').empty();
     _.forEach(data['preventative-health'], (value, key) => {
         console.log(key, value);
