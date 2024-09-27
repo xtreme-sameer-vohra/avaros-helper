@@ -28,6 +28,7 @@ function updateSidePanel(data) {
 
    $('#preventative-health').empty();
    if (data['preventative-health'].length > 0){
+    console.log("updateSidePanel preventative health", data['preventative-health']);
       header = $('<h3>Preventative Health</h3>');
       $('#preventative-health').append(header);
       _.forEach(data['preventative-health'], (value, key) => {
