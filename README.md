@@ -11,5 +11,5 @@ Chrome extension to enhance [Avaros](https://www.avaros.ca/) Oscar EMR to displa
 - Computed using height & weight
 
 #### LMP & EDD
-- LMP is determined by searching through notes for 'LMP: MM/DD/YYYY'
+- LMP is determined by searching through notes for 'LMP: MM/DD/YYYY' or 'LMP of MM/DD/YYYY'
 - EDD is determined by 1st day of LMP + 40 weeks (Naegele's Rule). Assumes 28 day cycle. 

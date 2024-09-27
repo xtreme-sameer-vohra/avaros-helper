@@ -170,15 +170,28 @@ function fetchMeasurements(token){
 }
 
 function extractLMPDate(text) {
-    const regex = /LMP:\s*(\d{1,2}\/\d{1,2}\/\d{4})/;
-    const match = text.match(regex);
-    return match && match[1] ? match[1] : null;
+    // This regex matches both MM/DD/YY and MM/DD/YYYY formats
+    const regex1 = /LMP:\s*(\d{1,2}\/\d{1,2}\/(?:\d{2}|\d{4}))/;
+    const match1 = text.match(regex1);
+    if (match1 && match1[1]){
+        return match1[1];
+    }
+
+    // This regex matches "LMP of MM/DD/YY" or "LMP of MM/DD/YYYY"
+    const regex2 = /LMP of (\d{1,2}\/\d{1,2}\/(?:\d{2}|\d{4}))/i;
+    const match2 = text.match(regex2);
+    return match2 && match2[1] ? match2[1] : null;
 }
 // Calculate EDD from LMP - Estimated due date (EDD) = 1st day of LMP + 40 weeks* (Naegele's Rule)
 function calculateEDD(lmpDate) {
     // Parse the LMP date string into a Date object
     const [month, day, year] = lmpDate.split('/');
-    const lmp = new Date(year, month - 1, day);  // month is 0-indexed in Date constructor
+
+    // Adjust for 2-digit year if necessary
+    const fullYear = year < 100 ? (year < 50 ? 2000 + year : 1900 + year) : year;
+
+    // Create a Date object (month is 0-indexed in Date constructor)
+    const lmp = new Date(fullYear, month - 1, day);
 
     // Add 40 weeks (280 days) to LMP
     const edd = new Date(lmp.getTime() + (280 * 24 * 60 * 60 * 1000));
