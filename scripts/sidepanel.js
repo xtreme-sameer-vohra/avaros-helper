@@ -25,9 +25,8 @@ function updateSidePanel(data) {
     $('#edd').closest('tr').hide();
    }
 
-
    $('#preventative-health').empty();
-   if (data['preventative-health'].length > 0){
+   if (_.keys(data['preventative-health']).length > 0){
     console.log("updateSidePanel preventative health", data['preventative-health']);
       header = $('<h3>Preventative Health</h3>');
       $('#preventative-health').append(header);
@@ -41,7 +40,7 @@ function updateSidePanel(data) {
             });
             $('#preventative-health').append(header);
             $('#preventative-health').append(details);
-    });
+      });
    }
 }
 
