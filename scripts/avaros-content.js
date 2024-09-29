@@ -185,7 +185,10 @@ function extractLMPDate(text) {
 // Calculate EDD from LMP - Estimated due date (EDD) = 1st day of LMP + 40 weeks* (Naegele's Rule)
 function calculateEDD(lmpDate) {
     // Parse the LMP date string into a Date object
-    const [month, day, year] = lmpDate.split('/');
+    const components = lmpDate.split('/');
+    const day = Number(components[1]);
+    const month = Number(components[0]);
+    const year = Number(components[2]);
 
     // Adjust for 2-digit year if necessary
     const fullYear = year < 100 ? (year < 50 ? 2000 + year : 1900 + year) : year;
